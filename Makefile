@@ -1,12 +1,12 @@
 #
 # プログラム名
 #
-PROG = helium_lda
+PROG = hydrogen_fem
 
 #
 # ソースコードが存在する相対パス
 #
-VPATH = src/alglib/src src/helium_lda src/helium_lda/gausslegendre
+VPATH = src/hydrogen_fem
 
 #
 # コンパイル対象のソースファイル群（カレントディレクトリ以下の*.cppファイル）
@@ -41,7 +41,7 @@ CXXFLAGS = -Wall -Wextra -O3 -std=c++17 -mtune=native -march=native
 #
 # リンク対象に含めるライブラリの指定
 #
-LDFLAGS = -lm -ldl -lxc
+LDFLAGS = -lm -ldl
 
 #
 # makeの動作
