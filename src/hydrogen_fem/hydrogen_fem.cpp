@@ -6,6 +6,7 @@
 */
 
 #include "hydrogen_fem.h"
+#include <cmath>				// for std::exp
 #include <cstdio>				// for FILE, std::fclose, std::fopen, std::fprintf 
 #include <memory>				// for std::unique_ptr
 #include <boost/assert.hpp>		// for BOOST_ASSERT
@@ -51,7 +52,7 @@ namespace hydrogen_fem {
 
     	for (auto i = 0; i < N; i++) {
 			auto const r = static_cast<double>(i) * DH;
-			fprintf(fp.get(), "%.14f, %.14f\n", r, c_[i]);
+			fprintf(fp.get(), "%.14f, %.14f, %.14f\n", r, -c_[i], 2.0 * std::exp(-r));
     	}
 	}
 		
