@@ -2,7 +2,7 @@
     \brief FEMで水素原子に対するSchrödinger方程式を解く
 
     Copyright © 2019 @dc1394 All Rights Reserved.
-	This software is released under the BSD 2-Clause License.
+    This software is released under the BSD 2-Clause License.
 */
 
 #include "hydrogen_fem.h"
@@ -13,9 +13,9 @@ int main()
 {
     hydrogen_fem::Hydrogen_FEM hl;
     std::cout << boost::format("計算が終わりました: 基底状態のエネルギー固有値E = %.14f (Hartree)\n") % hl.do_run();
-	hl.save_result();
+    hl.save_result();
 
-	std::cout << "計算結果を" << hydrogen_fem::Hydrogen_FEM::RESULTFILENAME << "に書き込みました" << std::endl;
+    std::cout << "計算結果を" << hydrogen_fem::Hydrogen_FEM::RESULTFILENAME << "に書き込みました" << std::endl;
 
-	return 0;
+    return 0;
 }
