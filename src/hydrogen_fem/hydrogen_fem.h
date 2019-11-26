@@ -10,8 +10,10 @@
 
 #pragma once
 
-#include <cstdint>      // for std::int32_t
-#include <Eigen/Core>   // for Eigen::MatrixXd
+#include <cstdint>                  // for std::int32_t
+#include <valarray>                 // for std::valarray
+#include <Eigen/Core>               // for Eigen::MatrixXd
+#include <boost/multi_array.hpp>    // for boost::multi_array
 
 namespace hydrogen_fem {
     //! A class.
@@ -56,36 +58,43 @@ namespace hydrogen_fem {
     private:
         //! A private member function (const).
         /*!
-            左辺の要素マトリックスを計算する
+            左辺の要素行列を計算する
+            \param dh 各要素の長さ
             \param n n番目の要素のn
-            \param p 左辺の要素マトリックスの行
-            \param q 左辺の要素マトリックスの列
-            \return 左辺の要素マトリックスの要素
+            \param p 左辺の要素行列の行
+            \param q 左辺の要素行列の列
+            \return 左辺の要素行列の要素
         */
-        double get_he_matrix_element(std::int32_t n, std::int32_t p, std::int32_t q) const;
+        double get_A_matrix_element(double dh, std::int32_t n, std::int32_t p, std::int32_t q) const;
 
         //! A private member function (const).
         /*!
-            右辺の要素マトリックスを計算する
+            右辺の要素行列を計算する
             \param n n番目の要素のn
-            \param p 右辺の要素マトリックスの行
-            \param q 右辺の要素マトリックスの列
-            \return 右辺の要素マトリックスの要素
+            \param p 右辺の要素行列の行
+            \param q 右辺の要素行列の列
+            \return 右辺の要素行列の要素
         */
-        double get_ue_matrix_element(std::int32_t n, std::int32_t p, std::int32_t q) const;
+        double get_B_matrix_element(double dh, std::int32_t n, std::int32_t p, std::int32_t q) const;
                 
         //! A private member function.
         /*!
-            左辺の全体マトリックスを生成する
+            全体行列を生成する
         */
-        void make_hg_matrix();
+        void make_global_matrix();
 
         //! A private member function.
         /*!
-            右辺の全体マトリックスを生成する
+            要素行列を求める
         */
-        void make_ug_matrix();
-        
+        void make_element_matrix();
+
+        //! A private member function.
+        /*!
+            入力データを生成する
+        */
+        void make_input_data();
+                
         // #endregion privateメンバ関数
 
         // #region メンバ変数
@@ -100,16 +109,28 @@ namespace hydrogen_fem {
     private:
         //! A private member variable (constant expression).
         /*!
-            Δh
+            節点数
         */
-        static auto constexpr DH = 0.02;
+        static auto constexpr NODE_TOTAL = 500;
 
         //! A private member variable (constant expression).
         /*!
-            全体マトリックスの行列数
+            要素数
         */
-        static auto constexpr N = 1000;
-                        
+        static auto constexpr ELE_TOTAL = NODE_TOTAL - 1;
+
+        //! A private member variable (constant expression).
+        /*!
+            積分区間の上限
+        */
+        static auto constexpr R_MAX = 30.0;
+
+        //! A private member variable (constant expression).
+        /*!
+            積分区間の上限
+        */
+        static auto constexpr R_MIN = 0.0;
+
         //! A private member variable.
         /*!
             固有ベクトル
@@ -118,13 +139,43 @@ namespace hydrogen_fem {
 
         //! A private member variable.
         /*!
-            左辺の全体マトリックス
+            左辺の全体行列
         */
         Eigen::MatrixXd hg_;
 
         //! A private member variable.
         /*!
-            右辺の全体マトリックス
+            各要素の長さ
+        */
+        std::valarray<double> length_;
+
+        //! A private member variable.
+        /*!
+            左辺要素係数行列
+        */
+        boost::multi_array<double, 3> mat_A_ele_;
+
+        //! A private member variable.
+        /*!
+            右辺要素係数行列
+        */
+        boost::multi_array<double, 3> mat_B_ele_;
+
+        //! A private member variable.
+        /*!
+            各要素のGlobal節点番号
+        */
+        boost::multi_array<std::int32_t, 2> node_num_glo_in_seg_ele_;
+
+        //! A private member variable.
+        /*!
+            各要素のLocal節点のx座標
+        */
+        boost::multi_array<double, 2> node_x_ele_;
+
+        //! A private member variable.
+        /*!
+            右辺の全体行列
         */
         Eigen::MatrixXd ug_;
 
