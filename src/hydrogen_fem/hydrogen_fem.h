@@ -123,13 +123,13 @@ namespace hydrogen_fem {
         /*!
             積分区間の上限
         */
-        static auto constexpr R_MAX = 30.0;
+        static auto constexpr R_MAX = 10.0;
 
         //! A private member variable (constant expression).
         /*!
             積分区間の上限
         */
-        static auto constexpr R_MIN = 0.0;
+        static auto constexpr R_MIN = -10.0;
 
         //! A private member variable.
         /*!

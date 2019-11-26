@@ -2,6 +2,7 @@
     \brief FEMで水素原子に対するSchrödinger方程式を解くクラスの実装
 
     Copyright © 2019 @dc1394 All Rights Reserved.
+    (but this is originally adapted by sunsetyuhi for fem1d_poisson.py from https://github.com/sunsetyuhi/fem_py/blob/master/fem1d_poisson )
     This software is released under the BSD 2-Clause License.
 */
 
@@ -11,7 +12,6 @@
 #include <memory>               // for std::unique_ptr
 #include <boost/assert.hpp>     // for BOOST_ASSERT
 #include <Eigen/Eigenvalues>    // for Eigen::GeneralizedSelfAdjointEigenSolver
-#include <iostream>
 
 namespace hydrogen_fem {
     // #region コンストラクタ
@@ -56,11 +56,11 @@ namespace hydrogen_fem {
 
     void Hydrogen_FEM::save_result() const
     {
-        //std::unique_ptr<FILE, decltype(&std::fclose)> fp(std::fopen(Hydrogen_FEM::RESULTFILENAME, "w"), std::fclose);
+        std::unique_ptr<FILE, decltype(&std::fclose)> fp(std::fopen(Hydrogen_FEM::RESULTFILENAME, "w"), std::fclose);
 
         for (auto i = 0; i < ELE_TOTAL; i++) {
             auto const r = static_cast<double>(i) * length_[i];
-        //    fprintf(fp.get(), "%.14f, %.14f, %.14f\n", r, -c_[i], 2.0 * std::exp(-r));
+            std::fprintf(fp.get(), "%.14f, %.14f, %.14f\n", r, -c_[i], 2.0 * std::exp(-r));
         }
     }
         
