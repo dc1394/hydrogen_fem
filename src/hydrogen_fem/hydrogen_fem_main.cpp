@@ -15,7 +15,7 @@ int main()
     std::cout << boost::format("計算が終わりました: 基底状態のエネルギー固有値E = %.14f (Hartree)\n") % hl.do_run();
     hl.save_result();
 
-    std::cout << "計算結果を" << hydrogen_fem::Hydrogen_FEM::RESULTFILENAME << "に書き込みました" << std::endl;
+    std::cout << "計算結果を" << hydrogen_fem::Hydrogen_FEM::RESULT_FILENAME << "に書き込みました" << std::endl;
 
     return 0;
 }

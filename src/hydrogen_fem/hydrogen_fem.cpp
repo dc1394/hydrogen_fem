@@ -56,7 +56,7 @@ namespace hydrogen_fem {
 
     void Hydrogen_FEM::save_result() const
     {
-        std::unique_ptr<FILE, decltype(&std::fclose)> fp(std::fopen(Hydrogen_FEM::RESULTFILENAME, "w"), std::fclose);
+        std::unique_ptr<FILE, decltype(&std::fclose)> fp(std::fopen(Hydrogen_FEM::RESULT_FILENAME, "w"), std::fclose);
 
         for (auto i = 0; i < ELE_TOTAL; i++) {
             auto const r = static_cast<double>(i) * length_[i];
@@ -68,17 +68,17 @@ namespace hydrogen_fem {
 
     // #region privateメンバ関数
 
-    double Hydrogen_FEM::get_A_matrix_element(double dh, std::int32_t n, std::int32_t p, std::int32_t q) const
+    double Hydrogen_FEM::get_A_matrix_element(std::int32_t e, double le, std::int32_t p, std::int32_t q) const
     {
-        auto const nd = static_cast<double>(n);
+        auto const ed = static_cast<double>(e);
         switch (p) {
         case 0:
             switch (q) {
             case 0:
-                return 0.5 * dh * (nd * nd + nd + 1.0 / 3.0) - dh * dh * (nd / 3.0 + 1.0 / 12.0);
+                return 0.5 * le * (ed * ed + ed + 1.0 / 3.0) - le * le * (ed / 3.0 + 1.0 / 12.0);
 
             case 1:
-                return -0.5 * dh * (nd * nd + nd + 1.0 / 3.0) - dh * dh * (nd / 6.0 + 1.0 / 12.0);
+                return -0.5 * le * (ed * ed + ed + 1.0 / 3.0) - le * le * (ed / 6.0 + 1.0 / 12.0);
 
             default:
                 BOOST_ASSERT(!"heの添字が2以上！");
@@ -88,10 +88,10 @@ namespace hydrogen_fem {
         case 1:
             switch (q) {
             case 0:
-                return -0.5 * dh * (nd * nd + nd + 1.0 / 3.0) - dh * dh * (nd / 6.0 + 1.0 / 12.0);
+                return -0.5 * le * (ed * ed + ed + 1.0 / 3.0) - le * le * (ed / 6.0 + 1.0 / 12.0);
 
             case 1:
-                return 0.5 * dh * (nd * nd + nd + 1.0 / 3.0) - dh * dh * (nd / 3.0 + 0.25);
+                return 0.5 * le * (ed * ed + ed + 1.0 / 3.0) - le * le * (ed / 3.0 + 0.25);
 
             default:
                 BOOST_ASSERT(!"heの添字が2以上！");
@@ -104,17 +104,17 @@ namespace hydrogen_fem {
         }
     }
     
-    double Hydrogen_FEM::get_B_matrix_element(double dh, std::int32_t n, std::int32_t p, std::int32_t q) const
+    double Hydrogen_FEM::get_B_matrix_element(std::int32_t e, double le, std::int32_t p, std::int32_t q) const
     {
-        auto const nd = static_cast<double>(n);
+        auto const ed = static_cast<double>(e);
         switch (p) {
         case 0:
             switch (q) {
             case 0:
-                return dh * dh * dh * (nd * nd / 3.0 + nd / 6.0 + 1.0 / 30.0);
+                return le * le * le * (ed * ed / 3.0 + ed / 6.0 + 1.0 / 30.0);
 
             case 1:
-                return dh * dh * dh * (nd * nd / 6.0 + nd / 6.0 + 1.0 / 20.0);
+                return le * le * le * (ed * ed / 6.0 + ed / 6.0 + 1.0 / 20.0);
 
             default:
                 BOOST_ASSERT(!"ueの添字が2以上！");
@@ -124,10 +124,10 @@ namespace hydrogen_fem {
         case 1:
             switch (q) {
             case 0:
-                return dh * dh * dh * (nd * nd / 6.0 + nd / 6.0 + 1.0 / 20.0);
+                return le * le * le * (ed * ed / 6.0 + ed / 6.0 + 1.0 / 20.0);
 
             case 1:
-                return dh * dh * dh * (nd * nd / 3.0 + nd / 2.0 + 1.0 / 5.0);
+                return le * le * le * (ed * ed / 3.0 + ed / 2.0 + 1.0 / 5.0);
 
             default:
                 BOOST_ASSERT(!"ueの添字が2以上！");
@@ -149,11 +149,11 @@ namespace hydrogen_fem {
 
         // 要素行列の各成分を計算
         for (auto e = 0; e < ELE_TOTAL; e++) {
-            auto const dh = length_[e];
+            auto const le = length_[e];
             for (auto i = 0; i < 2; i++) {
                 for (auto j = 0; j < 2; j++) {
-                    mat_A_ele_[e][i][j] = get_A_matrix_element(dh, e, i, j);
-                    mat_B_ele_[e][i][j] = get_B_matrix_element(dh, e, i, j);
+                    mat_A_ele_[e][i][j] = get_A_matrix_element(e, le, i, j);
+                    mat_B_ele_[e][i][j] = get_B_matrix_element(e, le, i, j);
                 }
             }
         }

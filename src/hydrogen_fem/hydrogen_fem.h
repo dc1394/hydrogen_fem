@@ -59,23 +59,24 @@ namespace hydrogen_fem {
         //! A private member function (const).
         /*!
             左辺の要素行列を計算する
-            \param dh 各要素の長さ
-            \param n n番目の要素のn
+            \param e e番目の要素の添字
+            \param le e番目の線分要素の長さ
             \param p 左辺の要素行列の行
             \param q 左辺の要素行列の列
             \return 左辺の要素行列の要素
         */
-        double get_A_matrix_element(double dh, std::int32_t n, std::int32_t p, std::int32_t q) const;
+        double get_A_matrix_element(std::int32_t e, double le, std::int32_t p, std::int32_t q) const;
 
         //! A private member function (const).
         /*!
             右辺の要素行列を計算する
-            \param n n番目の要素のn
+            \param e e番目の要素の添字
+            \param le e番目の線分要素の長さ
             \param p 右辺の要素行列の行
             \param q 右辺の要素行列の列
             \return 右辺の要素行列の要素
         */
-        double get_B_matrix_element(double dh, std::int32_t n, std::int32_t p, std::int32_t q) const;
+        double get_B_matrix_element(std::int32_t e, double le, std::int32_t p, std::int32_t q) const;
                 
         //! A private member function.
         /*!
@@ -104,7 +105,7 @@ namespace hydrogen_fem {
         /*!
             出力ファイル名
         */
-        static auto constexpr RESULTFILENAME = "result.csv";
+        static auto constexpr RESULT_FILENAME = "result.csv";
 
     private:
         //! A private member variable (constant expression).
