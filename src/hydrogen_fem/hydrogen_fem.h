@@ -65,6 +65,7 @@ namespace hydrogen_fem {
             \param q 左辺の要素行列の列
             \return 左辺の要素行列の要素
         */
+        [[nodiscard]]
         double get_A_matrix_element(std::int32_t e, double le, std::int32_t p, std::int32_t q) const;
 
         //! A private member function (const).
@@ -76,6 +77,7 @@ namespace hydrogen_fem {
             \param q 右辺の要素行列の列
             \return 右辺の要素行列の要素
         */
+        [[nodiscard]]
         double get_B_matrix_element(std::int32_t e, double le, std::int32_t p, std::int32_t q) const;
                 
         //! A private member function.
@@ -112,7 +114,7 @@ namespace hydrogen_fem {
         /*!
             節点数
         */
-        static auto constexpr NODE_TOTAL = 500;
+        static auto constexpr NODE_TOTAL = 100;
 
         //! A private member variable (constant expression).
         /*!
@@ -124,13 +126,13 @@ namespace hydrogen_fem {
         /*!
             積分区間の上限
         */
-        static auto constexpr R_MAX = 10.0;
+        static auto constexpr R_MAX = 30.0;
 
         //! A private member variable (constant expression).
         /*!
             積分区間の上限
         */
-        static auto constexpr R_MIN = -10.0;
+        static auto constexpr R_MIN = 0.0;
 
         //! A private member variable.
         /*!
@@ -172,7 +174,7 @@ namespace hydrogen_fem {
         /*!
             各要素のLocal節点のx座標
         */
-        boost::multi_array<double, 2> node_x_ele_;
+        boost::multi_array<double, 2> node_r_ele_;
 
         //! A private member variable.
         /*!

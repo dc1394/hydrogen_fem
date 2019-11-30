@@ -22,7 +22,7 @@ namespace hydrogen_fem {
             mat_A_ele_(boost::extents[ELE_TOTAL][2][2]),
             mat_B_ele_(boost::extents[ELE_TOTAL][2][2]),
             node_num_glo_in_seg_ele_(boost::extents[ELE_TOTAL][2]),
-            node_x_ele_(boost::extents[ELE_TOTAL][2]),
+            node_r_ele_(boost::extents[ELE_TOTAL][2]),
             ug_(Eigen::MatrixXd::Zero(NODE_TOTAL, NODE_TOTAL))
     {
     }
@@ -58,8 +58,10 @@ namespace hydrogen_fem {
     {
         std::unique_ptr<FILE, decltype(&std::fclose)> fp(std::fopen(Hydrogen_FEM::RESULT_FILENAME, "w"), std::fclose);
 
+
         for (auto i = 0; i < ELE_TOTAL; i++) {
             auto const r = static_cast<double>(i) * length_[i];
+            // 厳密な結果と比較
             std::fprintf(fp.get(), "%.14f, %.14f, %.14f\n", r, -c_[i], 2.0 * std::exp(-r));
         }
     }
@@ -144,7 +146,7 @@ namespace hydrogen_fem {
     {
         // 各線分要素の長さを計算
         for (auto e = 0; e < ELE_TOTAL; e++) {
-            length_[e] = std::fabs(node_x_ele_[e][1] - node_x_ele_[e][0]);
+            length_[e] = std::fabs(node_r_ele_[e][1] - node_r_ele_[e][0]);
         }
 
         // 要素行列の各成分を計算
@@ -175,7 +177,7 @@ namespace hydrogen_fem {
         
         for (auto e = 0; e < ELE_TOTAL; e++) {
             for (auto i = 0; i < 2; i++) {
-                node_x_ele_[e][i] = node_x_glo[node_num_glo_in_seg_ele_[e][i]];
+                node_r_ele_[e][i] = node_x_glo[node_num_glo_in_seg_ele_[e][i]];
             }
         }
     }
