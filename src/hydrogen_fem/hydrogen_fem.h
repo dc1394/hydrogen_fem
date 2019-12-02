@@ -136,12 +136,6 @@ namespace hydrogen_fem {
 
         //! A private member variable.
         /*!
-            固有ベクトル
-        */
-        Eigen::VectorXd c_;
-
-        //! A private member variable.
-        /*!
             左辺の全体行列
         */
         Eigen::MatrixXd hg_;
@@ -168,13 +162,19 @@ namespace hydrogen_fem {
         /*!
             各要素のGlobal節点番号
         */
-        boost::multi_array<std::int32_t, 2> node_num_glo_in_seg_ele_;
+        boost::multi_array<std::int32_t, 2> nod_num_seg_;
 
         //! A private member variable.
         /*!
             各要素のLocal節点のx座標
         */
         boost::multi_array<double, 2> node_r_ele_;
+
+        //! A private member variable.
+        /*!
+            固有ベクトル
+        */
+        Eigen::VectorXd phi_;
 
         //! A private member variable.
         /*!

@@ -21,7 +21,7 @@ namespace hydrogen_fem {
             length_(ELE_TOTAL),
             mat_A_ele_(boost::extents[ELE_TOTAL][2][2]),
             mat_B_ele_(boost::extents[ELE_TOTAL][2][2]),
-            node_num_glo_in_seg_ele_(boost::extents[ELE_TOTAL][2]),
+            nod_num_seg_(boost::extents[ELE_TOTAL][2]),
             node_r_ele_(boost::extents[ELE_TOTAL][2]),
             ug_(Eigen::MatrixXd::Zero(NODE_TOTAL, NODE_TOTAL))
     {
@@ -49,7 +49,7 @@ namespace hydrogen_fem {
         auto const e = es.eigenvalues()[0];
 
         // 固有ベクトルを取得
-        c_ = es.eigenvectors().col(0);
+        phi_ = es.eigenvectors().col(0);
 
         return e;
     }
@@ -62,7 +62,7 @@ namespace hydrogen_fem {
         for (auto i = 0; i < ELE_TOTAL; i++) {
             auto const r = static_cast<double>(i) * length_[i];
             // 厳密な結果と比較
-            std::fprintf(fp.get(), "%.14f, %.14f, %.14f\n", r, -c_[i], 2.0 * std::exp(-r));
+            std::fprintf(fp.get(), "%.14f, %.14f, %.14f\n", r, -phi_[i], 2.0 * std::exp(-r));
         }
     }
         
@@ -163,21 +163,21 @@ namespace hydrogen_fem {
 
     void Hydrogen_FEM::make_input_data()
     {
-        std::valarray<double> node_x_glo(NODE_TOTAL);
+        std::valarray<double> node_r_glo(NODE_TOTAL);
         auto const dr = (R_MAX - R_MIN) / static_cast<double>(ELE_TOTAL);
 
         for (auto i = 0; i <= ELE_TOTAL; i++) {
-            node_x_glo[i] = R_MIN + static_cast<double>(i) * dr;
+            node_r_glo[i] = R_MIN + static_cast<double>(i) * dr;
         }
 
         for (auto e = 0; e < ELE_TOTAL; e++) {
-            node_num_glo_in_seg_ele_[e][0] = e;
-            node_num_glo_in_seg_ele_[e][1] = e + 1;
+            nod_num_seg_[e][0] = e;
+            nod_num_seg_[e][1] = e + 1;
         }
         
         for (auto e = 0; e < ELE_TOTAL; e++) {
             for (auto i = 0; i < 2; i++) {
-                node_r_ele_[e][i] = node_x_glo[node_num_glo_in_seg_ele_[e][i]];
+                node_r_ele_[e][i] = node_r_glo[nod_num_seg_[e][i]];
             }
         }
     }
@@ -187,8 +187,8 @@ namespace hydrogen_fem {
         for (auto e = 0; e < ELE_TOTAL; e++) {
             for (auto i = 0; i < 2; i++) {
                 for (auto j = 0; j < 2; j++) {
-                    hg_(node_num_glo_in_seg_ele_[e][i], node_num_glo_in_seg_ele_[e][j]) += mat_A_ele_[e][i][j];
-                    ug_(node_num_glo_in_seg_ele_[e][i], node_num_glo_in_seg_ele_[e][j]) += mat_B_ele_[e][i][j];
+                    hg_(nod_num_seg_[e][i], nod_num_seg_[e][j]) += mat_A_ele_[e][i][j];
+                    ug_(nod_num_seg_[e][i], nod_num_seg_[e][j]) += mat_B_ele_[e][i][j];
                 }
             }
         }
