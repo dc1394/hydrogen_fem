@@ -57,8 +57,7 @@ namespace hydrogen_fem {
     void Hydrogen_FEM::save_result() const
     {
         std::unique_ptr<FILE, decltype(&std::fclose)> fp(std::fopen(Hydrogen_FEM::RESULT_FILENAME, "w"), std::fclose);
-
-
+        
         for (auto i = 0; i < ELE_TOTAL; i++) {
             auto const r = static_cast<double>(i) * length_[i];
             // 厳密な結果と比較
@@ -116,7 +115,7 @@ namespace hydrogen_fem {
                 return le * le * le * (ed * ed / 3.0 + ed / 6.0 + 1.0 / 30.0);
 
             case 1:
-                return le * le * le * (ed * ed / 6.0 + ed / 6.0 + 1.0 / 20.0);
+                return le * le * le * (ed * ed / 6.0 + ed / 6.0 + 0.05);
 
             default:
                 BOOST_ASSERT(!"ueの添字が2以上！");
@@ -126,10 +125,10 @@ namespace hydrogen_fem {
         case 1:
             switch (q) {
             case 0:
-                return le * le * le * (ed * ed / 6.0 + ed / 6.0 + 1.0 / 20.0);
+                return le * le * le * (ed * ed / 6.0 + ed / 6.0 + 0.05);
 
             case 1:
-                return le * le * le * (ed * ed / 3.0 + ed / 2.0 + 1.0 / 5.0);
+                return le * le * le * (ed * ed / 3.0 + ed / 2.0 + 0.2);
 
             default:
                 BOOST_ASSERT(!"ueの添字が2以上！");
