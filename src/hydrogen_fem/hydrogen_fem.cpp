@@ -23,6 +23,7 @@ namespace hydrogen_fem {
             mat_B_ele_(boost::extents[ELE_TOTAL][2][2]),
             nod_num_seg_(boost::extents[ELE_TOTAL][2]),
             node_r_ele_(boost::extents[ELE_TOTAL][2]),
+            node_r_glo_(NODE_TOTAL),
             ug_(Eigen::MatrixXd::Zero(NODE_TOTAL, NODE_TOTAL))
     {
     }
@@ -45,11 +46,14 @@ namespace hydrogen_fem {
         // 一般化固有値問題を解く
         Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> es(hg_, ug_);
 
-        // Eを取得
+        // エネルギー固有値Eを取得
         auto const e = es.eigenvalues()[0];
 
-        // 固有ベクトルを取得
+        // 固有ベクトル（波動関数）を取得
         phi_ = es.eigenvectors().col(0);
+
+        // 固有ベクトル（波動関数）を規格化
+        normalize();
 
         return e;
     }
@@ -162,11 +166,11 @@ namespace hydrogen_fem {
 
     void Hydrogen_FEM::make_input_data()
     {
-        std::valarray<double> node_r_glo(NODE_TOTAL);
+        // Global節点のx座標を定義(R_MIN～R_MAX）
         auto const dr = (R_MAX - R_MIN) / static_cast<double>(ELE_TOTAL);
-
         for (auto i = 0; i <= ELE_TOTAL; i++) {
-            node_r_glo[i] = R_MIN + static_cast<double>(i) * dr;
+            // 計算領域を等分割
+            node_r_glo_[i] = R_MIN + static_cast<double>(i) * dr;
         }
 
         for (auto e = 0; e < ELE_TOTAL; e++) {
@@ -176,7 +180,7 @@ namespace hydrogen_fem {
         
         for (auto e = 0; e < ELE_TOTAL; e++) {
             for (auto i = 0; i < 2; i++) {
-                node_r_ele_[e][i] = node_r_glo[nod_num_seg_[e][i]];
+                node_r_ele_[e][i] = node_r_glo_[nod_num_seg_[e][i]];
             }
         }
     }
@@ -193,6 +197,26 @@ namespace hydrogen_fem {
         }
     }
 
+    void Hydrogen_FEM::normalize()
+    {
+        auto sum = 0.0;
+        auto const size = phi_.size();
+        auto const max = size - 2;
+
+        // Simpsonの公式によって数値積分する
+        for (auto i = 0; i < max; i += 2) {
+            auto const f0 = phi_[i] * phi_[i] * node_r_glo_[i] * node_r_glo_[i];
+            auto const f1 = phi_[i + 1] * phi_[i + 1] * node_r_glo_[i + 1] * node_r_glo_[i + 1];
+            auto const f2 = phi_[i + 2] * phi_[i + 2] * node_r_glo_[i + 2] * node_r_glo_[i + 2];
+            sum += (f0 + 4.0 * f1 + f2);
+        }
+
+        auto const a_1 = 1.0 / std::sqrt(sum * length_[0] / 3.0);
+
+        for (auto i = 0; i < size; i++) {
+            phi_[i] *= a_1;
+        }
+    }
 
     // #endregion privateメンバ関数
 }
