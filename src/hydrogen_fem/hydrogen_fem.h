@@ -97,7 +97,13 @@ namespace hydrogen_fem {
             入力データを生成する
         */
         void make_input_data();
-                
+
+        //! A private member function.
+        /*!
+            固有ベクトル（波動関数）を規格化する
+        */
+        void normalize();
+
         // #endregion privateメンバ関数
 
         // #region メンバ変数
@@ -114,7 +120,7 @@ namespace hydrogen_fem {
         /*!
             節点数
         */
-        static auto constexpr NODE_TOTAL = 100;
+        static auto constexpr NODE_TOTAL = 5000;
 
         //! A private member variable (constant expression).
         /*!
@@ -133,12 +139,6 @@ namespace hydrogen_fem {
             積分区間の上限
         */
         static auto constexpr R_MIN = 0.0;
-
-        //! A private member variable.
-        /*!
-            固有ベクトル
-        */
-        Eigen::VectorXd c_;
 
         //! A private member variable.
         /*!
@@ -168,13 +168,25 @@ namespace hydrogen_fem {
         /*!
             各要素のGlobal節点番号
         */
-        boost::multi_array<std::int32_t, 2> node_num_glo_in_seg_ele_;
+        boost::multi_array<std::int32_t, 2> nod_num_seg_;
 
         //! A private member variable.
         /*!
             各要素のLocal節点のx座標
         */
         boost::multi_array<double, 2> node_r_ele_;
+
+        //! A private member variable.
+        /*!
+            Global節点のr座標
+        */
+        std::valarray<double> node_r_glo_;
+
+        //! A private member variable.
+        /*!
+            固有ベクトル
+        */
+        Eigen::VectorXd phi_;
 
         //! A private member variable.
         /*!
