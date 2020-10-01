@@ -210,7 +210,7 @@ namespace hydrogen_fem {
             auto const f2 = phi_[i + 2] * phi_[i + 2] * node_r_glo_[i + 2] * node_r_glo_[i + 2];
             sum += (f0 + 4.0 * f1 + f2);
         }
-
+        
         auto const a_1 = 1.0 / std::sqrt(sum * length_[0] / 3.0);
 
         for (auto i = 0; i < size; i++) {
