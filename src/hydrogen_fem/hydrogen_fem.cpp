@@ -65,7 +65,7 @@ namespace hydrogen_fem {
         for (auto i = 0; i < ELE_TOTAL; i++) {
             auto const r = static_cast<double>(i) * length_[i];
             // 厳密な結果と比較
-            std::fprintf(fp.get(), "%.14f, %.14f, %.14f\n", r, -phi_[i], 2.0 * std::exp(-r));
+            std::fprintf(fp.get(), "%.14f, %.14f, %.14f\n", r, phi_[i], 2.0 * std::exp(-r));
         }
     }
         
@@ -214,7 +214,7 @@ namespace hydrogen_fem {
         auto const a_1 = 1.0 / std::sqrt(sum * length_[0] / 3.0);
 
         for (auto i = 0; i < size; i++) {
-            phi_[i] *= a_1;
+            phi_[i] *= -a_1;
         }
     }
 
