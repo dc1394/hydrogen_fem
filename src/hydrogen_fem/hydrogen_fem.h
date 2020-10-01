@@ -172,7 +172,7 @@ namespace hydrogen_fem {
 
         //! A private member variable.
         /*!
-            各要素のLocal節点のx座標
+            各要素のLocal節点のr座標
         */
         boost::multi_array<double, 2> node_r_ele_;
 
