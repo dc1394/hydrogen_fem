@@ -41,7 +41,7 @@ CXXFLAGS = -Wall -Wextra -O3 -std=c++17 -mtune=native -march=native -fopenmp
 #
 # リンク対象に含めるライブラリの指定
 #
-LDFLAGS = -lm -ldl
+LDFLAGS = -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a ${MKLROOT}/lib/intel64/libmkl_intel_thread.a ${MKLROOT}/lib/intel64/libmkl_core.a -Wl,--end-group -liomp5 -lpthread -lm -ldl
 
 #
 # makeの動作

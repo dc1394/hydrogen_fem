@@ -21,7 +21,7 @@ namespace hydrogen_fem {
             length_(ELE_TOTAL),
             mat_A_ele_(boost::extents[ELE_TOTAL][2][2]),
             mat_B_ele_(boost::extents[ELE_TOTAL][2][2]),
-            nod_num_seg_(boost::extents[ELE_TOTAL][2]),
+            node_num_seg_(boost::extents[ELE_TOTAL][2]),
             node_r_ele_(boost::extents[ELE_TOTAL][2]),
             node_r_glo_(NODE_TOTAL),
             ug_(Eigen::MatrixXd::Zero(NODE_TOTAL, NODE_TOTAL))
@@ -174,13 +174,13 @@ namespace hydrogen_fem {
         }
 
         for (auto e = 0; e < ELE_TOTAL; e++) {
-            nod_num_seg_[e][0] = e;
-            nod_num_seg_[e][1] = e + 1;
+            node_num_seg_[e][0] = e;
+            node_num_seg_[e][1] = e + 1;
         }
         
         for (auto e = 0; e < ELE_TOTAL; e++) {
             for (auto i = 0; i < 2; i++) {
-                node_r_ele_[e][i] = node_r_glo_[nod_num_seg_[e][i]];
+                node_r_ele_[e][i] = node_r_glo_[node_num_seg_[e][i]];
             }
         }
     }
@@ -190,8 +190,8 @@ namespace hydrogen_fem {
         for (auto e = 0; e < ELE_TOTAL; e++) {
             for (auto i = 0; i < 2; i++) {
                 for (auto j = 0; j < 2; j++) {
-                    hg_(nod_num_seg_[e][i], nod_num_seg_[e][j]) += mat_A_ele_[e][i][j];
-                    ug_(nod_num_seg_[e][i], nod_num_seg_[e][j]) += mat_B_ele_[e][i][j];
+                    hg_(node_num_seg_[e][i], node_num_seg_[e][j]) += mat_A_ele_[e][i][j];
+                    ug_(node_num_seg_[e][i], node_num_seg_[e][j]) += mat_B_ele_[e][i][j];
                 }
             }
         }

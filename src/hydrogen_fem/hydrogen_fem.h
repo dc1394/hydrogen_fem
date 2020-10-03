@@ -168,7 +168,7 @@ namespace hydrogen_fem {
         /*!
             各要素のGlobal節点番号
         */
-        boost::multi_array<std::int32_t, 2> nod_num_seg_;
+        boost::multi_array<std::int32_t, 2> node_num_seg_;
 
         //! A private member variable.
         /*!
