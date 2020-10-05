@@ -31,17 +31,17 @@ DEPS = $(OBJS:.o=.d)
 #
 # C++コンパイラの指定
 #
-CXX = g++
+CXX = icpc
 
 #
 # C++コンパイラに与える、（最適化等の）オプション
 #
-CXXFLAGS = -Wall -Wextra -O3 -std=c++17 -mtune=native -march=native -fopenmp
+CXXFLAGS = -Wall -Wextra -O3 -xHOST -ipo -pipe -std=c++17 -qopenmp -mkl=parallel
 
 #
 # リンク対象に含めるライブラリの指定
 #
-LDFLAGS = -lm -ldl
+LDFLAGS = -liomp5 -lpthread -lm -ldl
 
 #
 # makeの動作
