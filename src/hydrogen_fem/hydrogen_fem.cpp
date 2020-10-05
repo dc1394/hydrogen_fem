@@ -34,8 +34,8 @@ namespace hydrogen_fem {
 
     double Hydrogen_FEM::do_run()
     {
-        // 入力データの生成
-        make_input_data();
+        // 各種データの生成
+        make_data();
 
         // 要素行列の生成
         make_element_matrix();
@@ -176,7 +176,7 @@ namespace hydrogen_fem {
         }
     }
 
-    void Hydrogen_FEM::make_input_data()
+    void Hydrogen_FEM::make_data()
     {
         // Global節点のx座標を定義(R_MIN～R_MAX）
         auto const dr = (R_MAX - R_MIN) / static_cast<double>(ELE_TOTAL);

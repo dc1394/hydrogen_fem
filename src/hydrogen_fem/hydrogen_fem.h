@@ -100,9 +100,9 @@ namespace hydrogen_fem {
 
         //! A private member function.
         /*!
-            入力データを生成する
+            各種データを生成する
         */
-        void make_input_data();
+        void make_data();
 
         //! A private member function.
         /*!
