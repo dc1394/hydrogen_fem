@@ -42,7 +42,10 @@ namespace hydrogen_fem {
 
         // 全体行列を生成
         make_global_matrix();
-                
+        
+        // 境界条件を設定
+        boundary_conditions();
+
         // 一般化固有値問題を解く
         Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> es(hg_, ug_);
 
@@ -72,6 +75,15 @@ namespace hydrogen_fem {
     // #endregion publicメンバ関数
 
     // #region privateメンバ関数
+
+    void Hydrogen_FEM::boundary_conditions()
+    {
+        // 左辺の全体行列のN + 1行とN + 1列を削る
+        hg_.conservativeResize(hg_.rows() - 1, hg_.cols() - 1);
+
+        // 右辺の全体行列のN + 1行とN + 1列を削る
+        ug_.conservativeResize(ug_.rows() - 1, ug_.cols() - 1);
+    }
 
     double Hydrogen_FEM::get_A_matrix_element(std::int32_t e, double le, std::int32_t p, std::int32_t q) const
     {

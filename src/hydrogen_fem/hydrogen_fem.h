@@ -56,6 +56,12 @@ namespace hydrogen_fem {
         // #region privateメンバ関数
 
     private:
+        //! A private member function.
+        /*!
+            境界条件を設定する
+        */
+        void boundary_conditions();
+
         //! A private member function (const).
         /*!
             左辺の要素行列を計算する
@@ -120,7 +126,7 @@ namespace hydrogen_fem {
         /*!
             節点数
         */
-        static auto constexpr NODE_TOTAL = 5000;
+        static auto constexpr NODE_TOTAL = 5001;
 
         //! A private member variable (constant expression).
         /*!
