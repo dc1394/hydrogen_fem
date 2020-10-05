@@ -58,7 +58,7 @@ namespace hydrogen_fem {
     private:
         //! A private member function.
         /*!
-            境界条件を設定する
+            境界条件処理を行う
         */
         void boundary_conditions();
 

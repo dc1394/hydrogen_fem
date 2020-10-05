@@ -43,7 +43,7 @@ namespace hydrogen_fem {
         // 全体行列を生成
         make_global_matrix();
         
-        // 境界条件を設定
+        // 境界条件処理を行う
         boundary_conditions();
 
         // 一般化固有値問題を解く
