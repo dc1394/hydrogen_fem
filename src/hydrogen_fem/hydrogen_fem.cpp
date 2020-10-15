@@ -55,6 +55,9 @@ namespace hydrogen_fem {
         // 固有ベクトル（波動関数）を取得
         phi_ = es.eigenvectors().col(0);
 
+        // 固有ベクトル（波動関数）のN要素目を追加
+        phi_.resize(NODE_TOTAL);
+
         // 固有ベクトル（波動関数）を規格化
         normalize();
 
@@ -65,7 +68,7 @@ namespace hydrogen_fem {
     {
         std::unique_ptr<FILE, decltype(&std::fclose)> fp(std::fopen(Hydrogen_FEM::RESULT_FILENAME, "w"), std::fclose);
         
-        for (auto i = 0; i < ELE_TOTAL; i++) {
+        for (auto i = 0; i < NODE_TOTAL; i++) {
             auto const r = static_cast<double>(i) * length_[i];
             // 厳密な結果と比較
             std::fprintf(fp.get(), "%.14f, %.14f, %.14f\n", r, phi_[i], 2.0 * std::exp(-r));

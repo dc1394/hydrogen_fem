@@ -126,7 +126,7 @@ namespace hydrogen_fem {
         /*!
             節点数
         */
-        static auto constexpr NODE_TOTAL = 5001;
+        static auto constexpr NODE_TOTAL = 5000;
 
         //! A private member variable (constant expression).
         /*!
