@@ -12,7 +12,7 @@
 
 #include <cstdint>                  // for std::int32_t
 #include <valarray>                 // for std::valarray
-#include <Eigen/Core>               // for Eigen::MatrixXd
+#include <Eigen/Core>               // for Eigen::MatrixXd, Eigen::VectorXd
 #include <boost/multi_array.hpp>    // for boost::multi_array
 
 namespace hydrogen_fem {
@@ -106,7 +106,7 @@ namespace hydrogen_fem {
 
         //! A private member function.
         /*!
-            固有ベクトル（波動関数）を規格化する
+            基底状態の固有関数（波動関数）を規格化する
         */
         void normalize();
 
@@ -117,9 +117,15 @@ namespace hydrogen_fem {
     public:
         //! A public member variable (constant expression).
         /*!
-            出力ファイル名
+            基底状態の固有関数（波動関数）出力ファイル名
         */
-        static auto constexpr RESULT_FILENAME = "result.csv";
+        static auto constexpr EIGENFUNC_FILENAME = "eigenfunc.csv";
+
+        //! A public member variable (constant expression).
+        /*!
+            エネルギー固有値出力ファイル名
+        */
+        static auto constexpr EIGENVAL_FILENAME = "eigenval.csv";
 
     private:
         //! A private member variable (constant expression).
@@ -145,6 +151,12 @@ namespace hydrogen_fem {
             積分区間の上限
         */
         static auto constexpr R_MIN = 0.0;
+
+        //! A private member variable.
+        /*!
+            エネルギー固有値
+        */
+        Eigen::VectorXd eigenval_;
 
         //! A private member variable.
         /*!
@@ -190,7 +202,7 @@ namespace hydrogen_fem {
 
         //! A private member variable.
         /*!
-            固有ベクトル
+            基底状態の固有関数（波動関数）
         */
         Eigen::VectorXd phi_;
 

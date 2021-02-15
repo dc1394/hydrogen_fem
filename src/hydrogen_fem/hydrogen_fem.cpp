@@ -49,10 +49,10 @@ namespace hydrogen_fem {
         // 一般化固有値問題を解く
         Eigen::GeneralizedSelfAdjointEigenSolver<Eigen::MatrixXd> es(hg_, ug_);
 
-        // エネルギー固有値Eを取得
-        auto const e = es.eigenvalues()[0];
+        // エネルギー固有値を取得
+        eigenval_ = es.eigenvalues();
 
-        // 固有ベクトル（波動関数）を取得
+        // 基底状態の固有関数（波動関数）（波動関数）を取得
         phi_ = es.eigenvectors().col(0);
 
         // 固有ベクトル（波動関数）のN要素目を追加
@@ -61,18 +61,26 @@ namespace hydrogen_fem {
         // 固有ベクトル（波動関数）を規格化
         normalize();
 
-        return e;
+        return eigenval_[0];
     }
 
     void Hydrogen_FEM::save_result() const
     {
-        std::unique_ptr<FILE, decltype(&std::fclose)> fp(std::fopen(Hydrogen_FEM::RESULT_FILENAME, "w"), std::fclose);
+        std::unique_ptr<FILE, decltype(&std::fclose)> fp_eigenfunc(std::fopen(Hydrogen_FEM::EIGENFUNC_FILENAME, "w"), std::fclose);
         
         for (auto i = 0; i < NODE_TOTAL; i++) {
             auto const r = static_cast<double>(i) * length_[i];
             // 厳密な結果と比較
-            std::fprintf(fp.get(), "%.14f, %.14f, %.14f\n", r, phi_[i], 2.0 * std::exp(-r));
+            std::fprintf(fp_eigenfunc.get(), "%.14f, %.14f, %.14f\n", r, phi_[i], 2.0 * std::exp(-r));
         }
+
+        std::unique_ptr<FILE, decltype(&std::fclose)> fp_eigenval(std::fopen(Hydrogen_FEM::EIGENVAL_FILENAME, "w"), std::fclose);
+        
+        for (auto i = 0; i < NODE_TOTAL - 1; i++) {
+            // 厳密な結果と比較
+            std::fprintf(fp_eigenval.get(), "%d, %.14f, %.14f\n", i + 1, eigenval_[i], - 0.5 / static_cast<double>((i + 1) * (i + 1)));
+        }
+
     }
         
     // #endregion publicメンバ関数

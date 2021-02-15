@@ -23,7 +23,7 @@ int main()
     
     hl.save_result();
 
-    std::cout << "計算結果を" << hydrogen_fem::Hydrogen_FEM::RESULT_FILENAME << "に書き込みました" << std::endl;
+    std::cout << "計算結果を" << hydrogen_fem::Hydrogen_FEM::EIGENFUNC_FILENAME << "と" << hydrogen_fem::Hydrogen_FEM::EIGENVAL_FILENAME << "に書き込みました" << std::endl;
 
     return 0;
 }
