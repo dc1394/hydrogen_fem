@@ -68,7 +68,7 @@ namespace hydrogen_fem {
     {
         std::unique_ptr<FILE, decltype(&std::fclose)> fp_eigenfunc(std::fopen(Hydrogen_FEM::EIGENFUNC_FILENAME, "w"), std::fclose);
         
-        for (auto i = 0; i < NODE_TOTAL; i++) {
+        for (auto i = 0; i < NODE_TOTAL - 1; i++) {
             auto const r = static_cast<double>(i) * length_[i];
             // 厳密な結果と比較
             std::fprintf(fp_eigenfunc.get(), "%.14f, %.14f, %.14f\n", r, phi_[i], 2.0 * std::exp(-r));
